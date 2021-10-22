@@ -1,35 +1,25 @@
 const express = require('express')
 const router = express.Router()
 const fs = require('fs')
-const dbData = require('../db/db.json')
+let dbData = require('../db/db.json')
 const { v4: uuidv4 } = require('uuid')
- 
-router.get('/', (req, res) => {
-    let info = JSON.parse(fs.readFileSync(dbData, 'utf8'))
-    res.json(info)
-})
+
+router.get('/', (req, res) => res.json(dbData))
 
 router.post('/', (req, res) => {
-    let newNote = req.body
-    console.log(newNote)
-    newNote.id = uuidv4()
-    let noteData = JSON.parse(fs.readFileSync(dbData, 'utf8'))
-    dbData.push(noteData)
-
-    fs.writeFileSync('../db/db.json', JSON.stringify(dbData, null, 4))
+    let { title, text } = req.body
+    let addNote = { title, text, id: uuidv4() }
+    dbData.push(addNote)
+    fs.writeFileSync('./db/db.json', JSON.stringify(dbData, null, 4))
     console.log("Done")
-    res.status(200).json(noteData)
+    res.status(201).json(addNote)
 })
 
-
 router.delete("/:id", (req, res) => {
-    let noteID = req.params.id.toString()
-    let noteData = JSON.parse(fs.readFileSync(dbData, 'utf8'))
-
-    const newData = noteData.filter(note => note.id.toString() !== noteID)
-
-    fs.writeFileSync('../db/db.json', JSON.stringify(newData, null, 4))
-    res.json(newData)
+    let noteID = req.params.id
+    dbData = dbData.filter(note => note.id != noteID)
+    fs.writeFileSync('./db/db.json', JSON.stringify(dbData, null, 4))
+    return res.json(dbData)
 })
 
 module.exports = router

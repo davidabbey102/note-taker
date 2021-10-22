@@ -1,7 +1,12 @@
 [
     {
-        "title":"Test Title",
-        "text":"Test text",
+        "title": "Test Title",
+        "text": "Test text",
         "id": 100
+    },
+    {
+        "title": "This is an example",
+        "text": "This is an example note which will be retrievable even if I select another note or leave the page and come back later",
+        "id": "8ff0f1ab-6c8b-4d5f-9552-126818ed6d47"
     }
 ]
